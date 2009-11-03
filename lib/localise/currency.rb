@@ -27,12 +27,13 @@ module Localise
     def format_to_decimal(value, nice = false, short = false)
       value = value.to_i
       
-      whole = value / @divisor
-      fraction = value % @divisor
+      sign = value < 0 ? '-' : ''
+      whole = value.abs / @divisor
+      fraction = value.abs % @divisor
       
       whole = nice_integer(whole) if nice
       
-      fractional? && (!short || fraction > 0) ? "#{whole}.#{fraction.to_s.rjust(@decimal_places, '0')}" : whole.to_s
+      sign + (fractional? && (!short || fraction > 0) ? "#{whole}.#{fraction.to_s.rjust(@decimal_places, '0')}" : whole.to_s)
     end
     
     def format_value(value, format_name)

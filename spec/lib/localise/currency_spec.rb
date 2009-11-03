@@ -57,23 +57,26 @@ describe Localise::Currency, 'instance methods' do
       subject { Localise::Currency.new(CURRENCY_1_SPEC.merge(:decimal_places => 0)) }
       
       it "should not show decimal point" do
-        subject.format_to_decimal(123456).should == "123456"
-        subject.format_to_decimal(0).should      ==      "0"
+        subject.format_to_decimal(123456).should  ==  "123456"
+        subject.format_to_decimal(0).should       ==       "0"
+        subject.format_to_decimal(-123456).should == "-123456"
       end      
 
       it "should format nicely" do
-        subject.format_to_decimal(123456, true).should == "123,456"
-        subject.format_to_decimal(0, true).should      ==       "0"
-      end      
+        subject.format_to_decimal(123456, true).should  ==  "123,456"
+        subject.format_to_decimal(0, true).should       ==        "0"
+        subject.format_to_decimal(-123456, true).should == "-123,456"
+      end
     end
     
     it "should support decimal formatting" do
       subject.format_to_decimal(123456789).should == "123456.789"
-      subject.format_to_decimal(123456).should == "123.456"
-      subject.format_to_decimal(123056).should == "123.056"
-      subject.format_to_decimal(123006).should == "123.006"
-      subject.format_to_decimal(123000).should == "123.000"
-      subject.format_to_decimal(0).should      ==   "0.000"
+      subject.format_to_decimal(123456).should  ==  "123.456"
+      subject.format_to_decimal(123056).should  ==  "123.056"
+      subject.format_to_decimal(123006).should  ==  "123.006"
+      subject.format_to_decimal(123000).should  ==  "123.000"
+      subject.format_to_decimal(0).should       ==    "0.000"
+      subject.format_to_decimal(-123456).should == "-123.456"
     end
     
     it "should support nice decimal formatting" do
