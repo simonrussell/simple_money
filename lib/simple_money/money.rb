@@ -13,8 +13,8 @@ module SimpleMoney
       @currency.format_to_decimal(@amount)
     end
      
-    def to_s
-      @currency.format_value(@amount, :iso)
+    def to_s(format = :iso)
+      @currency.format_value(@amount, format)
     end
     
     def <=>(other)

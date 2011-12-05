@@ -3,6 +3,7 @@ require 'spec_helper'
 describe SimpleMoney::Money do
 
   let(:currency) { SimpleMoney::Currency.new(:name => 'Spec Currency', :iso_code => 'XYZ', :symbol => '$', :decimal_places => 2) }
+  let(:money) { SimpleMoney::Money.new(currency, 123) }
   
   subject { SimpleMoney::Money }
 
@@ -101,6 +102,23 @@ describe SimpleMoney::Money do
       it { should == money }
     end
   
+  end
+  
+  describe "#to_s" do
+    
+    before do
+      SimpleMoney::Currency.stub!(:find => currency)
+    end
+    
+    let(:format) { mock }
+    
+    subject { money.to_s(format) }
+    
+    it "should call the currency with itself and the argument" do
+      currency.should_receive(:format_value).with(money.amount, format)
+      subject
+    end    
+    
   end
   
 end
