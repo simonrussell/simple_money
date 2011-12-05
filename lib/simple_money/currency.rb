@@ -1,8 +1,12 @@
+# -*- encoding: utf-8 -*-
+
 module SimpleMoney
   class Currency
     
     CURRENCY_SPECS = {
-      :AUD => { :name => 'Australian Dollar', :iso_code => 'AUD', :symbol => '$', :decimal_places => 2 }
+      :AUD => { :name => 'Australian Dollar', :iso_code => 'AUD', :symbol => '$', :decimal_places => 2 },
+      :USD => { :name => 'United States Dollar', :iso_code => 'USD', :symbol => '$', :decimal_places => 2 },
+      :GBP => { :name => 'Pound Sterling', :iso_code => 'GBP', :symbol => '£', :decimal_places => 2 }     
     }
     
     attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor
@@ -66,8 +70,7 @@ module SimpleMoney
       
       iso_code = iso_code.to_sym
       
-      @currency_singletons ||= Hash.new { |h, k| h[k] = new(CURRENCY_SPECS[iso_code]).freeze if CURRENCY_SPECS.key?(iso_code) }
-      
+      @currency_singletons ||= Hash.new { |h, k| h[k] = new(CURRENCY_SPECS[k]).freeze if CURRENCY_SPECS.key?(k) }      
       @currency_singletons[iso_code]
     end
     
