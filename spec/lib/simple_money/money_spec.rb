@@ -6,11 +6,11 @@ describe SimpleMoney::Money do
   
   subject { SimpleMoney::Money }
 
-  before do
-    SimpleMoney::Currency.stub!(:find => currency)
-  end
-
   describe "simple" do
+    before do
+      SimpleMoney::Currency.stub!(:find => currency)
+    end
+  
     subject { SimpleMoney::Money.new(:XYZ, 123) }
     
     its(:currency) { should == currency }
@@ -23,6 +23,10 @@ describe SimpleMoney::Money do
   end
   
   describe "operators" do
+    before do
+      SimpleMoney::Currency.stub!(:find => currency)
+    end
+  
     before do
       @a = subject.new(:XYZ, 1000)
       @b = subject.new(:XYZ, 500)
@@ -70,6 +74,33 @@ describe SimpleMoney::Money do
       (@b * 2.0).should == @a
     end
 
+  end
+  
+  describe "::from" do
+  
+    subject { SimpleMoney::Money.from(value) }
+    
+    context "with nil" do
+      let(:value) { nil }
+      it { should be_nil }
+    end
+    
+    context "with blank string" do
+      let(:value) { '' }
+      it { should be_nil }
+    end
+    
+    context "with Money" do
+      let(:value) { SimpleMoney::Money.random }
+      it { should == value }
+    end
+    
+    context "with iso String" do
+      let(:money) { SimpleMoney::Money.random }
+      let(:value) { money.to_s }
+      it { should == money }
+    end
+  
   end
   
 end

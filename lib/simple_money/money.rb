@@ -62,5 +62,20 @@ module SimpleMoney
       
       new(currencies.sample, rand(10000))
     end
+    
+    def self.from(value)
+      case value
+      when Money
+        value
+      when nil, /\A\s*\Z/
+        nil
+      when /^([A-Z]{3})(\d+(?:\.\d+)?)$/
+        currency = Currency.find($1)
+        Money.new(currency, currency.parse_from_decimal($2))
+      else
+        raise "#{value}: can't make Money from #{value.class}"
+      end
+    end
+    
   end
 end
