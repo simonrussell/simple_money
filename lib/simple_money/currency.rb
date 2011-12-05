@@ -6,7 +6,8 @@ module SimpleMoney
     CURRENCY_SPECS = {
       :AUD => { :name => 'Australian Dollar', :iso_code => 'AUD', :symbol => '$', :decimal_places => 2 },
       :USD => { :name => 'United States Dollar', :iso_code => 'USD', :symbol => '$', :decimal_places => 2 },
-      :GBP => { :name => 'Pound Sterling', :iso_code => 'GBP', :symbol => '£', :decimal_places => 2 }     
+      :GBP => { :name => 'Pound Sterling', :iso_code => 'GBP', :symbol => '£', :decimal_places => 2 },
+      :EUR => { :name => 'Euro', :iso_code => 'EUR', :symbol => '€', :decimal_places => 2 }  
     }
     
     attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor
