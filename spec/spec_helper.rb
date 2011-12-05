@@ -1,1 +1,1 @@
-require "#{File.dirname(__FILE__)}/../lib/localise"
+require "#{File.dirname(__FILE__)}/../lib/simple_money"

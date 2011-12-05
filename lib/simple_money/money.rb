@@ -1,4 +1,4 @@
-module Localise
+module SimpleMoney
   class Money
     include Comparable
     

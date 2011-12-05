@@ -1,16 +1,16 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Localise::Money do
+describe SimpleMoney::Money do
 
-  subject { Localise::Money }
+  subject { SimpleMoney::Money }
 
   before do
-    @currency = Localise::Currency.new(:name => 'Spec Currency', :iso_code => 'XYZ', :symbol => '$', :decimal_places => 2)
-    Localise::Currency.stub!(:find).and_return(@currency)
+    @currency = SimpleMoney::Currency.new(:name => 'Spec Currency', :iso_code => 'XYZ', :symbol => '$', :decimal_places => 2)
+    SimpleMoney::Currency.stub!(:find).and_return(@currency)
   end
 
   describe "simple" do
-    subject { Localise::Money.new(:XYZ, 123) }
+    subject { SimpleMoney::Money.new(:XYZ, 123) }
     
     its(:currency) { should == @currency }
     its(:amount) { should == 123 }

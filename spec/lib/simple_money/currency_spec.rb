@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe Localise::Currency, 'class methods' do
+describe SimpleMoney::Currency, 'class methods' do
   
-  subject { Localise::Currency }
+  subject { SimpleMoney::Currency }
   
   it "should be able to find AUD from symbol" do
     subject.find(:AUD).iso_code.should == 'AUD'
@@ -17,7 +17,7 @@ describe Localise::Currency, 'class methods' do
   end
   
   describe 'AUD' do
-    subject { Localise::Currency.find(:AUD) }
+    subject { SimpleMoney::Currency.find(:AUD) }
   
     it { should be_frozen }
     
@@ -28,11 +28,11 @@ describe Localise::Currency, 'class methods' do
     
 end
 
-describe Localise::Currency, 'instance methods' do
+describe SimpleMoney::Currency, 'instance methods' do
   
   CURRENCY_1_SPEC = { :name => 'Spec Dollar', :iso_code => 'XYZ', :symbol => '$', :html_symbol => '&pound;', :decimal_places => 3 }
   
-  subject { Localise::Currency.new(CURRENCY_1_SPEC) }
+  subject { SimpleMoney::Currency.new(CURRENCY_1_SPEC) }
   
   CURRENCY_1_SPEC.each do |k, v|
     its(k) { should == v }
@@ -42,19 +42,19 @@ describe Localise::Currency, 'instance methods' do
   it { should be_fractional }
   
   it "shouldn't be fractional when decimal_places == 0" do
-    Localise::Currency.new(CURRENCY_1_SPEC.merge(:decimal_places => 0)).should_not be_fractional
+    SimpleMoney::Currency.new(CURRENCY_1_SPEC.merge(:decimal_places => 0)).should_not be_fractional
   end
   
   its(:divisor) { should == 10**CURRENCY_1_SPEC[:decimal_places] }
   
   it "should use symbol when html symbol not supplied" do
-    Localise::Currency.new(CURRENCY_1_SPEC.merge(:html_symbol => nil)).html_symbol.should == '$'
+    SimpleMoney::Currency.new(CURRENCY_1_SPEC.merge(:html_symbol => nil)).html_symbol.should == '$'
   end
   
   describe "decimal formatting" do
   
     describe "non fractional" do
-      subject { Localise::Currency.new(CURRENCY_1_SPEC.merge(:decimal_places => 0)) }
+      subject { SimpleMoney::Currency.new(CURRENCY_1_SPEC.merge(:decimal_places => 0)) }
       
       it "should not show decimal point" do
         subject.format_to_decimal(123456).should  ==  "123456"
