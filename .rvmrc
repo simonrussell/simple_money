@@ -1,1 +1,1 @@
-rvm use ruby-1.9.2-p290@simonrussell-simple-money --create
+rvm use ruby-1.9.2-p290@simonrussell-simple_money --create
