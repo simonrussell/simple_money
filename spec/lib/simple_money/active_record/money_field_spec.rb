@@ -32,7 +32,7 @@ describe SimpleMoney::ActiveRecord::MoneyField do
       
       subject { instance.fish_price }
       
-      describe "with not-nil currency and nil amount" do
+      context "with not-nil currency and nil amount" do
 
         before do
           instance.fish_price_currency = SimpleMoney::Money.random.currency.iso_code
@@ -43,7 +43,7 @@ describe SimpleMoney::ActiveRecord::MoneyField do
       
       end
       
-      describe "with not-nil currency and amount" do
+      context "with not-nil currency and amount" do
         let(:money) { SimpleMoney::Money.random }
         
         before do
@@ -67,6 +67,47 @@ describe SimpleMoney::ActiveRecord::MoneyField do
           should == money
         end
       end
+    end
+    
+    describe "#<name>=" do
+      
+      let(:value) { mock }
+
+      subject { instance.fish_price = value }
+    
+      it "should call Money.from with the value" do
+        SimpleMoney::Money.should_receive(:from).with(value)
+        subject
+      end
+      
+      context "with nil" do
+        let(:value) { nil }
+        
+        it "should set the currency to nil" do
+          instance.should_receive(:fish_price_currency=).with(nil)
+          subject
+        end
+        
+        it "should set the amount to nil" do
+          instance.should_receive(:fish_price_in_cents=).with(nil)
+          subject
+        end
+      end
+    
+      context "with a money" do
+        let(:value) { SimpleMoney::Money.random }
+        
+        it "should set the currency" do
+          instance.should_receive(:fish_price_currency=).with(value.currency.iso_code)
+          subject
+        end
+        
+        it "should set the amount" do
+          instance.should_receive(:fish_price_in_cents=).with(value.amount)
+          subject
+        end
+      end
+      
     end
   
   end
