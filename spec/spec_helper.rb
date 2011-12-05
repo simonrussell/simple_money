@@ -1,1 +1,1 @@
-require "#{File.dirname(__FILE__)}/../lib/simple_money"
+require File.expand_path('../../lib/simple_money', __FILE__)
