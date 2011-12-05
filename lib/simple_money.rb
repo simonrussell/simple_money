@@ -1,2 +1,4 @@
-require 'simple_money/currency'
-require 'simple_money/money'
+module SimpleMoney
+  autoload :Currency, 'simple_money/currency'
+  autoload :Money, 'simple_money/money'
+end
