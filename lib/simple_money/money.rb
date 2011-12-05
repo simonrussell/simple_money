@@ -57,6 +57,10 @@ module SimpleMoney
       end
     end
     
-         
+    def self.random(currencies = Currency::CURRENCY_SPECS.keys)
+      currencies = [currencies] unless currencies.is_a?(Array)
+      
+      new(currencies.sample, rand(10000))
+    end
   end
 end
