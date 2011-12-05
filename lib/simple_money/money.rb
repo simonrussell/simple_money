@@ -72,8 +72,32 @@ module SimpleMoney
       when /^([A-Z]{3})(\d+(?:\.\d+)?)$/
         currency = Currency.find($1)
         Money.new(currency, currency.parse_from_decimal($2))
+      when Hash
+        from_hash(value)
       else
         raise "#{value}: can't make Money from #{value.class}"
+      end
+    end
+    
+    private
+    
+    def self.from_hash(hash)
+      currency_code = nil
+      amount_in_decimal = nil
+      
+      hash.each do |key, value|
+        case key
+        when :currency_code, 'currency_code'
+          currency_code = value.to_s
+        when :amount_in_decimal, 'amount_in_decimal'
+          amount_in_decimal = value.to_s
+        end
+      end
+      
+      if currency_code && amount_in_decimal
+        amount_in_decimal.gsub!(/[^a-z0-9\.]/, '')
+        currency = Currency.find(currency_code)
+        Money.new(currency, currency.parse_from_decimal(amount_in_decimal))
       end
     end
     

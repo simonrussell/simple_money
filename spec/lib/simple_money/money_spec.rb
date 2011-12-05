@@ -92,16 +92,31 @@ describe SimpleMoney::Money do
     end
     
     context "with Money" do
-      let(:value) { SimpleMoney::Money.random }
-      it { should == value }
+      let(:money) { SimpleMoney::Money.random }
+      
+      context "as Money" do
+        let(:value) { money }
+        it { should == money }
+      end
+      
+      context "as iso String" do
+        let(:value) { money.to_s }
+        it { should == money }
+      end
+      
+      context "as hash" do
+        let(:value) do
+          {
+            'currency_code' => money.currency.iso_code,
+            'amount_in_decimal' => money.currency.format_to_decimal(money.amount + 10_000_000, true)
+          }  
+        end
+        
+        it { should == money + SimpleMoney::Money.new(money.currency, 10_000_000) }
+      end
+      
     end
     
-    context "with iso String" do
-      let(:money) { SimpleMoney::Money.random }
-      let(:value) { money.to_s }
-      it { should == money }
-    end
-  
   end
   
   describe "#to_s" do
