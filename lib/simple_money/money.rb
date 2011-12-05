@@ -94,6 +94,9 @@ module SimpleMoney
         end
       end
       
+      currency_code = nil if currency_code =~ /\A\s*\Z/
+      amount_in_decimal = nil if amount_in_decimal =~ /\A\s*\Z/
+      
       if currency_code && amount_in_decimal
         amount_in_decimal.gsub!(/[^a-z0-9\.]/, '')
         currency = Currency.find(currency_code)

@@ -115,6 +115,17 @@ describe SimpleMoney::Money do
         it { should == money + SimpleMoney::Money.new(money.currency, 10_000_000) }
       end
       
+      context "as hash with empty values" do
+        let(:value) do
+          {
+            'currency_code' => '',
+            'amount_in_decimal' => ''
+          }  
+        end
+        
+        it { should be_nil }
+      end
+      
     end
     
   end
