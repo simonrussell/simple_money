@@ -2,17 +2,18 @@ require 'spec_helper'
 
 describe SimpleMoney::Money do
 
+  let(:currency) { SimpleMoney::Currency.new(:name => 'Spec Currency', :iso_code => 'XYZ', :symbol => '$', :decimal_places => 2) }
+  
   subject { SimpleMoney::Money }
 
   before do
-    @currency = SimpleMoney::Currency.new(:name => 'Spec Currency', :iso_code => 'XYZ', :symbol => '$', :decimal_places => 2)
-    SimpleMoney::Currency.stub!(:find).and_return(@currency)
+    SimpleMoney::Currency.stub!(:find => currency)
   end
 
   describe "simple" do
     subject { SimpleMoney::Money.new(:XYZ, 123) }
     
-    its(:currency) { should == @currency }
+    its(:currency) { should == currency }
     its(:amount) { should == 123 }
     its(:amount_in_decimal) { should == "1.23" }
     
