@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'autotest-standalone'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec', '~> 2.8.0.rc1'
-  s.add_development_dependency 'nyan-cat-formatter'
   
   s.required_ruby_version = '>= 1.9.2'
 
