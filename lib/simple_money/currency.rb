@@ -92,7 +92,7 @@ module SimpleMoney
     def nice_integer(value)
       return value.to_s if value < GROUPING_DIVISOR
       
-      "#{nice_integer(value / GROUPING_DIVISOR)},#{value % GROUPING_DIVISOR}"
+      "#{nice_integer(value / GROUPING_DIVISOR)},#{(value % GROUPING_DIVISOR).to_s.rjust(3, '0')}"
     end
     
   end

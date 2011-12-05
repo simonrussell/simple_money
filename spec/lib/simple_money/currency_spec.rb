@@ -87,6 +87,7 @@ describe SimpleMoney::Currency, 'instance methods' do
       subject.format_to_decimal(3456789, true).should    ==     "3,456.789"
       subject.format_to_decimal(456789, true).should     ==       "456.789"
       subject.format_to_decimal(56789, true).should      ==        "56.789"
+      subject.format_to_decimal(1009096, true).should    ==     "1,009.096"
       subject.format_to_decimal(0, true).should          ==         "0.000"
     end
     
