@@ -32,7 +32,8 @@ describe SimpleMoney::Currency, 'instance methods' do
   
   CURRENCY_1_SPEC = { :name => 'Spec Dollar', :iso_code => 'XYZ', :symbol => '$', :html_symbol => '&pound;', :decimal_places => 3 }
   
-  subject { SimpleMoney::Currency.new(CURRENCY_1_SPEC) }
+  let(:currency) { SimpleMoney::Currency.new(CURRENCY_1_SPEC) }
+  subject { currency }
   
   CURRENCY_1_SPEC.each do |k, v|
     its(k) { should == v }
@@ -114,6 +115,23 @@ describe SimpleMoney::Currency, 'instance methods' do
       it "should format #{format_name}" do
         subject.should_receive(:format_to_decimal).with(1234, *expected_args).and_return("_")
         subject.format_value(1234, format_name).should == result
+      end
+    end
+    
+  end
+  
+  describe "#parse_from_decimal" do
+    
+    {
+      '123.006' => 123006,
+      '123.056' => 123056,    
+      '123.456' => 123456,
+      '123.45'  => 123450,
+      '123.4'   => 123400,
+      '123'     => 123000
+    }.each do |input, output|
+      it "should parse #{input.inspect} to #{output}" do
+        currency.parse_from_decimal(input).should == output
       end
     end
     

@@ -10,7 +10,7 @@ module SimpleMoney
       :EUR => { :name => 'Euro', :iso_code => 'EUR', :symbol => '€', :decimal_places => 2 }  
     }
     
-    attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor
+    attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor, :decimal_regex
     
     def initialize(options)
       @name = options[:name].freeze
@@ -20,6 +20,8 @@ module SimpleMoney
       
       @decimal_places = options[:decimal_places]
       @divisor = 10**@decimal_places
+      
+      @decimal_regex = @decimal_places > 0 ? /\A(\d+)(?:\.(\d{1,#{@decimal_places}}))?\Z/ : /\A(\d+)\Z/
       
       # unfortunately we can't freeze here because of the specs
     end
@@ -73,6 +75,14 @@ module SimpleMoney
       
       @currency_singletons ||= Hash.new { |h, k| h[k] = new(CURRENCY_SPECS[k]).freeze if CURRENCY_SPECS.key?(k) }      
       @currency_singletons[iso_code]
+    end
+    
+    def parse_from_decimal(string)
+      raise "#{string.inspect}: invalid decimal" unless string =~ @decimal_regex
+      
+      result = $1.to_i * @divisor
+      result += $2.ljust(@decimal_places, '0').to_i if $2
+      result
     end
     
     private
