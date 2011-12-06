@@ -71,12 +71,17 @@ describe SimpleMoney::ActiveRecord::MoneyField do
     
     describe "#<name>=" do
       
+      let(:currency_code) { mock }
       let(:value) { mock }
+
+      before do
+        instance.fish_price_currency = currency_code
+      end
 
       subject { instance.fish_price = value }
     
       it "should call Money.from with the value" do
-        SimpleMoney::Money.should_receive(:from).with(value)
+        SimpleMoney::Money.should_receive(:from).with(value, :default_currency_code => currency_code)
         subject
       end
       

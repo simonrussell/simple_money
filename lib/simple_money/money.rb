@@ -12,6 +12,10 @@ module SimpleMoney
     def amount_in_decimal
       @currency.format_to_decimal(@amount)
     end
+    
+    def currency_code
+      @currency.iso_code
+    end
      
     def to_s(format = :iso)
       @currency.format_value(@amount, format)
@@ -63,7 +67,7 @@ module SimpleMoney
       new(currencies.sample, rand(10000))
     end
     
-    def self.from(value)
+    def self.from(value, options = {})
       case value
       when Money
         value
@@ -73,7 +77,7 @@ module SimpleMoney
         currency = Currency.find($1)
         Money.new(currency, currency.parse_from_decimal($2))
       when Hash
-        from_hash(value)
+        from_hash(value, options)
       else
         raise "#{value}: can't make Money from #{value.class}"
       end
@@ -81,7 +85,7 @@ module SimpleMoney
     
     private
     
-    def self.from_hash(hash)
+    def self.from_hash(hash, options = {})
       currency_code = nil
       amount_in_decimal = nil
       
@@ -96,6 +100,8 @@ module SimpleMoney
       
       currency_code = nil if currency_code =~ /\A\s*\Z/
       amount_in_decimal = nil if amount_in_decimal =~ /\A\s*\Z/
+      
+      currency_code ||= options[:default_currency_code]
       
       if currency_code && amount_in_decimal
         amount_in_decimal.gsub!(/[^a-z0-9\.]/, '')

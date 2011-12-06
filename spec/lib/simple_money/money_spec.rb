@@ -15,6 +15,7 @@ describe SimpleMoney::Money do
     subject { SimpleMoney::Money.new(:XYZ, 123) }
     
     its(:currency) { should == currency }
+    its(:currency_code) { should == currency.iso_code }
     its(:amount) { should == 123 }
     its(:amount_in_decimal) { should == "1.23" }
     
@@ -124,6 +125,18 @@ describe SimpleMoney::Money do
         end
         
         it { should be_nil }
+      end
+      
+      context "as hash with no currency, but default currency supplied" do
+        subject { SimpleMoney::Money.from(value, :default_currency_code => money.currency.iso_code) }
+      
+        let(:value) do
+          {
+            'amount_in_decimal' => money.amount_in_decimal
+          }
+        end
+        
+        it { should == money }
       end
       
     end
