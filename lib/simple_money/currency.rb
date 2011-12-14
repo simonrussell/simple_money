@@ -11,6 +11,8 @@ module SimpleMoney
       :JPY => { :name => 'Japanese Yen', :iso_code => 'JPY', :symbol => '¥', :decimal_places => 0 }
     }
     
+    VALID_REGEX = /\A(#{CURRENCY_SPECS.map { |k,v| k }.join('|')})\z/
+    
     attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor, :decimal_regex
     
     def initialize(options)
@@ -22,7 +24,7 @@ module SimpleMoney
       @decimal_places = options[:decimal_places]
       @divisor = 10**@decimal_places
       
-      @decimal_regex = @decimal_places > 0 ? /\A(\d+)(?:\.(\d{1,#{@decimal_places}}))?\Z/ : /\A(\d+)\Z/
+      @decimal_regex = @decimal_places > 0 ? /\A(\d+)(?:\.(\d{#{@decimal_places}}))?\Z/ : /\A(\d+)\Z/
       
       # unfortunately we can't freeze here because of the specs
     end
@@ -71,7 +73,7 @@ module SimpleMoney
     
     def self.find(iso_code)
       return iso_code if iso_code.is_a?(Currency)
-      return nil unless iso_code =~ /\A[A-Z]{3}\Z/
+      return nil unless iso_code =~ VALID_REGEX
       
       iso_code = iso_code.to_sym
       
@@ -84,7 +86,7 @@ module SimpleMoney
     end
     
     def parse_from_decimal(string)
-      raise "#{string.inspect}: invalid decimal" unless string =~ @decimal_regex
+      raise DecimalFormatError.new("#{string.inspect}: invalid decimal") unless string =~ @decimal_regex
       
       result = $1.to_i * @divisor
       result += $2.ljust(@decimal_places, '0').to_i if $2
