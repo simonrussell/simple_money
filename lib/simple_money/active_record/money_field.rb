@@ -49,6 +49,9 @@ module SimpleMoney
                       @#{decimal_attr} = value
                       
                       self.#{cents_column} = (#{currency_attr} && #{currency_attr}.parse_from_decimal(value.to_s))
+                      
+                    rescue SimpleMoney::DecimalFormatError
+                      self.#{cents_column} = nil
                     end"
                         
       end
