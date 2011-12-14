@@ -7,7 +7,8 @@ module SimpleMoney
       :AUD => { :name => 'Australian Dollar', :iso_code => 'AUD', :symbol => '$', :decimal_places => 2 },
       :USD => { :name => 'United States Dollar', :iso_code => 'USD', :symbol => '$', :decimal_places => 2 },
       :GBP => { :name => 'Pound Sterling', :iso_code => 'GBP', :symbol => '£', :decimal_places => 2 },
-      :EUR => { :name => 'Euro', :iso_code => 'EUR', :symbol => '€', :decimal_places => 2 }  
+      :EUR => { :name => 'Euro', :iso_code => 'EUR', :symbol => '€', :decimal_places => 2 },
+      :JPY => { :name => 'Japanese Yen', :iso_code => 'JPY', :symbol => '¥', :decimal_places => 0 }
     }
     
     attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor, :decimal_regex
@@ -70,11 +71,16 @@ module SimpleMoney
     
     def self.find(iso_code)
       return iso_code if iso_code.is_a?(Currency)
+      return nil unless iso_code =~ /\A[A-Z]{3}\Z/
       
       iso_code = iso_code.to_sym
       
       @currency_singletons ||= Hash.new { |h, k| h[k] = new(CURRENCY_SPECS[k]).freeze if CURRENCY_SPECS.key?(k) }      
       @currency_singletons[iso_code]
+    end
+    
+    def self.[](iso_code)
+      find(iso_code)
     end
     
     def parse_from_decimal(string)
