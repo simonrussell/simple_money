@@ -127,8 +127,8 @@ describe SimpleMoney::Currency, 'instance methods' do
       '123.006' => 123006,
       '123.056' => 123056,    
       '123.456' => 123456,
-      '123.45'  => 123450,
-      '123.4'   => 123400,
+#      '123.45'  => 123450,
+#      '123.4'   => 123400,
       '123'     => 123000
     }.each do |input, output|
       it "should parse #{input.inspect} to #{output}" do
