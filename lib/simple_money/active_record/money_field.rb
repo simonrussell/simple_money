@@ -3,6 +3,18 @@ module SimpleMoney
   module ActiveRecord::MoneyField
     module ClassMethods
       
+      def currency_field(name)
+        currency_code_column = "#{name}_code"
+
+        class_eval "def #{name}
+                      Currency[#{currency_code_column}]
+                    end"
+                    
+        class_eval "def #{name}=(currency)
+                      self.#{currency_code_column} = (currency && currency.iso_code)
+                    end"              
+      end
+      
       def money_field(name)
         cents_column = "#{name}_in_cents"
         currency_attr = "#{name}_currency"
@@ -21,14 +33,8 @@ module SimpleMoney
                       self.#{cents_column} = (money && money.amount)
                     end"
                     
-        class_eval "def #{currency_attr}
-                      Currency[#{currency_code_column}]
-                    end"
-                    
-        class_eval "def #{currency_attr}=(currency)
-                      self.#{currency_code_column} = (currency && currency.iso_code)
-                    end"
-                    
+        currency_field(currency_attr)
+        
         class_eval "def #{currency_code_column}=(code)
                       write_attribute(:#{currency_code_column}, code)
                       
