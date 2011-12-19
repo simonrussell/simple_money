@@ -12,6 +12,8 @@ module SimpleMoney
     }
     
     VALID_REGEX = /\A(#{CURRENCY_SPECS.map { |k,v| k }.join('|')})\z/
+    CODES = CURRENCY_SPECS.map { |k, v| k.to_s }.sort
+    CODES_TO_NAMES = Hash[CURRENCY_SPECS.map { |k, v| [k.to_s, "#{k} - #{v[:name]}"] }.sort]
     
     attr_reader :name, :iso_code, :symbol, :html_symbol, :decimal_places, :divisor, :decimal_regex
     
