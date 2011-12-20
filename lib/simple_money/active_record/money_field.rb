@@ -62,6 +62,50 @@ module SimpleMoney
                         
       end
       
+      def fixed_currency_money_field(name, currency)
+        cents_column = "#{name}_in_cents"
+        currency_attr = "#{name}_currency"
+        currency_code_column = "#{name}_currency_code"
+        decimal_attr = "#{name}_in_decimal"
+        
+        class_eval "def #{name}
+                      a = #{cents_column}                   
+                      Money.new(#{currency_attr}, a) if a
+                    end"
+                    
+        class_eval "def #{name}=(money)
+                      remove_instance_variable(:@#{decimal_attr}) if instance_variable_defined?(:@#{decimal_attr})
+                      return unless money.nil? || money.currency == #{currency_attr}
+                      self.#{cents_column} = (money && money.amount)
+                    end"
+                    
+        class_eval "def #{currency_attr}
+                      Currency[#{currency_code_column}]
+                    end"
+
+        class_eval "def #{currency_code_column}
+                      #{currency.iso_code.inspect}
+                    end"
+                    
+        class_eval "def #{decimal_attr}
+                      if instance_variable_defined?(:@#{decimal_attr})
+                        @#{decimal_attr}
+                      elsif #{name}
+                        #{name}.amount_in_decimal
+                      end
+                    end"
+                    
+        class_eval "def #{decimal_attr}=(value)
+                      @#{decimal_attr} = value
+                      
+                      self.#{cents_column} = (#{currency_attr} && #{currency_attr}.parse_from_decimal(value.to_s))
+                      
+                    rescue SimpleMoney::DecimalFormatError
+                      self.#{cents_column} = nil
+                    end"
+                        
+      end
+
     end    
   end
 
