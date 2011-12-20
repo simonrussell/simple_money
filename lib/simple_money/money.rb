@@ -41,6 +41,12 @@ module SimpleMoney
       Money.new(@currency, (@amount * other).to_i)
     end
     
+    def /(other)
+      raise "can't divide by #{other}" unless other.is_a?(Money) && compatible_with?(other)
+      
+      @amount.to_f / other.amount
+    end
+    
     def +(other)
       if other.eql?(0)
         self

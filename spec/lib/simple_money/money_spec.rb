@@ -75,6 +75,10 @@ describe SimpleMoney::Money do
       (@b * 2).should == @a
       (@b * 2.0).should == @a
     end
+    
+    it "should support division by a Money" do
+      (@a / @b).should == 2
+    end
 
   end
   
